@@ -1,4 +1,4 @@
-export default function StartMenu(props) {
+export default function StartMenu(props: { toggleQuiz: () => void }) {
     return (
         <main className="min-h-screen bg flex flex-col justify-center items-center">
             <h1 className="font-bold text-[2rem]">Quizzical</h1>

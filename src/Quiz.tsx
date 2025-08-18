@@ -1,14 +1,47 @@
 import { nanoid } from "nanoid"
 import { useEffect, useState, useRef } from "react"
+import type { JSX } from "react"
 import clsx from "clsx"
-import he from "he"
+import * as he from "he"
 import { Loader } from "lucide-react";
 
-export default function Quiz(props) {
-    const [questions, setQuestions] = useState([])
-    const [selectedAnswers, setSelectedAnswers] = useState([])
-    const [isQuizOver, setIsQuizOver] = useState(false)
-    const didFetch = useRef(false)
+type Answer = {
+    id: string
+    text: string
+    isCorrect: boolean
+}
+
+type SelectedAnswer = {
+    sectionId: string
+    buttonId: string
+    isCorrect: boolean
+}
+
+type Question = {
+    type: string
+    difficulty: string
+    category: string
+    question: string
+    correct_answer: string
+    incorrect_answers: string[]
+}
+
+type PreparedQuestion = {
+    type: string
+    difficulty: string
+    category: string
+    question: string
+    correct_answer: string
+    incorrect_answers: string[]
+    sectionId: string
+    answers: Answer[]
+}
+
+export default function Quiz(props: { toggleQuiz: () => void; }): JSX.Element {
+    const [questions, setQuestions] = useState<PreparedQuestion[]>([])
+    const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([])
+    const [isQuizOver, setIsQuizOver] = useState<boolean>(false)
+    const didFetch = useRef<boolean>(false)
 
     useEffect(() => {
         if (didFetch.current) return
@@ -28,9 +61,9 @@ export default function Quiz(props) {
                     return res.json()
                 })
                 .then(data => {
-                    const preparedQuestions = data.results.map(question => {
-                        const sectionId = nanoid()
-                        const allAnswers = [...question.incorrect_answers, question.correct_answer].map(a => ({ id: nanoid(), text: he.decode(a), isCorrect: question.correct_answer === a ? true : false })).sort(() => Math.random() - 0.5)
+                    const preparedQuestions:PreparedQuestion[] = data.results.map((question:Question):PreparedQuestion => {
+                        const sectionId:string = nanoid()
+                        const allAnswers:Answer[] = [...question.incorrect_answers, question.correct_answer].map((a:string):Answer => ({ id: nanoid(), text: he.decode(a), isCorrect: question.correct_answer === a ? true : false })).sort(() => Math.random() - 0.5)
 
                         return {
                             ...question,
@@ -47,11 +80,11 @@ export default function Quiz(props) {
     }, [])
 
 
-    function checkAnswers() {
+    function checkAnswers():void {
         isQuizOver ? props.toggleQuiz() : setIsQuizOver(true)
     }
 
-    function selectAnswer(sectionId, buttonId, isCorrect) {
+    function selectAnswer(sectionId: string, buttonId: string, isCorrect: boolean):void {
         setSelectedAnswers(prev => {
             const isExisting = prev.find(answer => answer.sectionId === sectionId)
 
@@ -63,7 +96,7 @@ export default function Quiz(props) {
         })
     }
 
-    function getButtonStatus({ isCorrect, isQuizOver, isSelected }) {
+    function getButtonStatus(isCorrect:boolean, isQuizOver:boolean, isSelected:boolean):string {
         if (isCorrect && isQuizOver) return "bg-[#94D7A2]";
         if (isCorrect && !isQuizOver && isSelected) return "bg-[#D6DBF5]";
         if (!isCorrect && isQuizOver && isSelected) return "bg-[#F8BCBC] opacity-50";
@@ -71,16 +104,16 @@ export default function Quiz(props) {
         if (!isCorrect && !isQuizOver && isSelected) return "bg-[#D6DBF5]";
         return "border-[#4D5B9E] border";
     }
-
-    const renderQuestions = questions.map(question => {
+    
+    const renderQuestions:JSX.Element[] = questions.map((question:PreparedQuestion):JSX.Element => {
         return (
             <section key={question.sectionId} className="mt-3.5 w-full">
                 <h2 className="font-bold">{question.question}</h2>
                 <ul className="mt-3 flex gap-3 mb-[15px]">{
-                    question.answers.map(a => {
-                        const isCorrect = a.isCorrect
-                        const isSelected = selectedAnswers.some(sA => sA.buttonId === a.id)
-                        const buttonStyle = clsx("active:scale-95 active:duration-50 rounded-lg pt-1 pb-1 pr-4 pl-4 font-medium font-inter text-[0.625rem]", getButtonStatus({ isCorrect, isQuizOver, isSelected }), isQuizOver ? "cursor-not-allowed" : "cursor-pointer")
+                    question.answers.map((a:Answer):JSX.Element => {
+                        const isCorrect:boolean = a.isCorrect
+                        const isSelected:boolean = selectedAnswers.some(sA => sA.buttonId === a.id)
+                        const buttonStyle:string = clsx("active:scale-95 active:duration-50 rounded-lg pt-1 pb-1 pr-4 pl-4 font-medium font-inter text-[0.625rem]", getButtonStatus(isCorrect, isQuizOver, isSelected), isQuizOver ? "cursor-not-allowed" : "cursor-pointer")
                         return <button onClick={() => selectAnswer(question.sectionId, a.id, isCorrect)} disabled={isQuizOver} key={a.id} className={buttonStyle}>{a.text}</button>
                     })}
                 </ul>
