@@ -129,7 +129,7 @@ export default function Quiz(props: { toggleQuiz: () => void; }): JSX.Element {
 
                     {renderQuestions}
 
-                    <section className="mt-9 flex flex-wrap items-center justify-center gap-5">
+                    <section className="mt-9 flex flex-wrap items-center justify-center gap-5 text-center">
 
                         {isQuizOver && <p className="font-bold text-[0.75em]">You scored {selectedAnswers.filter(a => a.isCorrect).length}/{questions.length} correct answers</p>}
 
