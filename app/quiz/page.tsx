@@ -9,16 +9,18 @@ import Results from "@/app/quiz/Results"
 import Questions from "@/app/quiz/Questions"
 import { useQuizStore } from "@/app/store/useQuizStore"
 import { Answer, Question, PreparedQuestion } from "@/app/types"
+import { useRouter } from "next/navigation"
 
 export default function Quiz(): JSX.Element {
     const didFetch = useRef<boolean>(false)
-    const { questions, setQuestions } = useQuizStore()
+    const { questions, setQuestions, resetGame } = useQuizStore()
+    const router = useRouter()
 
-    useEffect(():void => {
+    useEffect((): void => {
         if (didFetch.current) return
         didFetch.current = true
 
-        function fetchData(retries:number = 5):void {
+        function fetchData(retries: number = 5): void {
             fetch("https://opentdb.com/api.php?amount=5&type=multiple")
                 .then(res => {
                     if (res.status === 429) {
@@ -45,7 +47,13 @@ export default function Quiz(): JSX.Element {
                     })
                     setQuestions(preparedQuestions)
                 })
-                .catch(err => console.error(err))
+                .catch(err => {
+                    console.error(err)
+                    if (retries === 0) {
+                        resetGame()
+                        router.push("/")
+                    }
+                })
         }
         fetchData()
     }, [setQuestions])
