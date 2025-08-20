@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-spin: spin 3s linear infinite
+  --animate-spin: spin 3s linear infinite;
+  --font-karla: var(--font-karla), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
 }
 
 .bg {

@@ -32,9 +32,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#555555"></meta>
       </head>
       <body
-        className={`${karla.variable} lg:text-3xl text-[#293264] overflow-x-hidden`}
+        className={`${karla.variable} ${inter.variable} lg:text-3xl text-[#293264] overflow-x-hidden`}
       >
-        <div className="overflow-hidden">
+        <div className="overflow-hidden font-karla">
           {children}
         </div>
       </body>
