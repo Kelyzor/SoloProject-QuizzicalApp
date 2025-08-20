@@ -24,7 +24,7 @@ export default function Questions(): JSX.Element[] {
                     question.answers.map((a: Answer): JSX.Element => {
                         const isCorrect: boolean = a.isCorrect
                         const isSelected: boolean = selectedAnswers.some(sA => sA.buttonId === a.id)
-                        const buttonStyle: string = clsx("active:scale-95 active:duration-50 rounded-lg pt-2 pb-2 pr-4 pl-4 font-medium font-inter text-[0.75em] lg:text-[0.5em]", getButtonStatus(isCorrect, isSelected), isQuizOver ? "cursor-not-allowed" : "cursor-pointer")
+                        const buttonStyle: string = clsx("active:scale-95 w-full h-full active:duration-50 rounded-lg pt-2 pb-2 pr-4 pl-4 font-medium font-inter text-[0.75em] lg:text-[0.5em]", getButtonStatus(isCorrect, isSelected), isQuizOver ? "cursor-not-allowed" : "cursor-pointer")
                         return <li key={nanoid()}>
                             <button
                                 onClick={() => selectAnswer(question.sectionId, a.id, isCorrect)}
