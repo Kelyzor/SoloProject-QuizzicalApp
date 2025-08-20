@@ -34,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${karla.variable} lg:text-3xl text-[#293264] overflow-x-hidden`}
       >
-        {children}
+        <div className="overflow-hidden">
+          {children}
+        </div>
       </body>
     </html>
   );
