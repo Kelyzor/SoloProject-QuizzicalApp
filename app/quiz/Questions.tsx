@@ -7,13 +7,26 @@ import { nanoid } from "nanoid";
 export default function Questions(): JSX.Element[] {
     const { questions, selectedAnswers, selectAnswer, isQuizOver } = useQuizStore()
 
+    function getMidGameStyle(isSelected: boolean): string {
+        return isSelected ? "bg-answer-selected" : "border border-answer-border"
+    }
+
+    function getEndGameStyle(isCorrect: boolean, isSelected: boolean): string {
+        if (isCorrect) {
+            return "bg-answer-correct-over"
+        } else {
+            if (isSelected) {
+                return "bg-answer-wrong-selected opacity-50"
+            } else {
+                return "border-answer-border border opacity-50"
+            }
+        }
+    }
+
     function getButtonStatus(isCorrect: boolean, isSelected: boolean): string {
-        if (isCorrect && isQuizOver) return "bg-[#94D7A2]";
-        if (isCorrect && !isQuizOver && isSelected) return "bg-[#D6DBF5]";
-        if (!isCorrect && isQuizOver && isSelected) return "bg-[#F8BCBC] opacity-50";
-        if (!isCorrect && isQuizOver && !isSelected) return "border-[#4D5B9E] border opacity-50";
-        if (!isCorrect && !isQuizOver && isSelected) return "bg-[#D6DBF5]";
-        return "border-[#4D5B9E] border";
+        return isQuizOver
+            ? getEndGameStyle(isCorrect, isSelected)
+            : getMidGameStyle(isSelected)
     }
 
     return questions.map((question: PreparedQuestion): JSX.Element => {

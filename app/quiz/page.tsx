@@ -36,7 +36,7 @@ export default function Quiz(): JSX.Element {
                 .then(data => {
                     const preparedQuestions: PreparedQuestion[] = data.results.map((question: Question): PreparedQuestion => {
                         const sectionId: string = nanoid()
-                        const allAnswers: Answer[] = [...question.incorrect_answers, question.correct_answer].map((a: string): Answer => ({ id: nanoid(), text: he.decode(a), isCorrect: question.correct_answer === a ? true : false })).sort(() => Math.random() - 0.5)
+                        const allAnswers: Answer[] = shuffleArray([...question.incorrect_answers, question.correct_answer].map((a: string): Answer => ({ id: nanoid(), text: he.decode(a), isCorrect: question.correct_answer === a ? true : false })))
 
                         return {
                             ...question,
@@ -57,6 +57,15 @@ export default function Quiz(): JSX.Element {
         }
         fetchData()
     }, [setQuestions])
+
+    function shuffleArray<T>(array: T[]): T[] {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
 
     return questions.length > 0 ?
         <main className="min-h-screen text-[1.25em] pt-4 pb-10 pr-6 pl-6 sm:pt-10 sm:pb-10 sm:pr-20 sm:pl-20 flex flex-col items-center justify-between bg">

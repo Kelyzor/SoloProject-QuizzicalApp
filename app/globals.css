@@ -2,8 +2,20 @@
 
 @theme {
   --animate-spin: spin 3s linear infinite;
+  
   --font-karla: var(--font-karla), sans-serif;
   --font-inter: var(--font-inter), sans-serif;
+  
+  --color-text: #293264;
+
+  --color-answer-selected: #D6DBF5;
+  --color-answer-border: #4D5B9E;
+  --color-answer-correct-over: #94D7A2;
+  --color-answer-wrong-selected: #F8BCBC;
+
+  --color-button-text: #F5F7FB;
+  --color-button-bg: #4D5B9E;
+  --color-button-bg-hover: #414d8a;
 }
 
 .bg {

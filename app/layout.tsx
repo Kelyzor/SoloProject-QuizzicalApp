@@ -34,7 +34,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#555555"></meta>
       </head>
       <body
-        className={`${karla.variable} ${inter.variable} lg:text-3xl text-[#293264] overflow-x-hidden`}
+        className={`${karla.variable} ${inter.variable} lg:text-3xl text-text overflow-x-hidden`}
       >
         <Analytics />
         <SpeedInsights />
