@@ -6,6 +6,8 @@ export default function Results():JSX.Element {
     const router = useRouter()
     const { isQuizOver, setIsQuizOver, selectedAnswers, questions, resetGame } = useQuizStore()
 
+    // If the game is over, then it resets the states and returns to the main menu,
+    // otherwise sets the game status to over
     function checkAnswers(): void {
         if (isQuizOver) {
             resetGame()
@@ -15,6 +17,7 @@ export default function Results():JSX.Element {
         }
     }
 
+    // Counts the number of correct answers out of the total number of answers
     const correctAnswersCount = `${selectedAnswers.filter(a => a.isCorrect).length}/${questions.length}`
 
     return (
