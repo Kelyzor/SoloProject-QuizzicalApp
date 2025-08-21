@@ -7,10 +7,12 @@ import { nanoid } from "nanoid";
 export default function Questions(): JSX.Element[] {
     const { questions, selectedAnswers, selectAnswer, isQuizOver } = useQuizStore()
 
+    // Get the button style when the game is over
     function getMidGameStyle(isSelected: boolean): string {
         return isSelected ? "bg-answer-selected" : "border border-answer-border"
     }
 
+    // Get the button style when the game is not over
     function getEndGameStyle(isCorrect: boolean, isSelected: boolean): string {
         if (isCorrect) {
             return "bg-answer-correct-over"
@@ -23,6 +25,7 @@ export default function Questions(): JSX.Element[] {
         }
     }
 
+    // Get the button style
     function getButtonStatus(isCorrect: boolean, isSelected: boolean): string {
         return isQuizOver
             ? getEndGameStyle(isCorrect, isSelected)
